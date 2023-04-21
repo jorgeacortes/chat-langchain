@@ -83,6 +83,9 @@
                     var header = document.getElementById('header');
                     header.innerHTML = "Ask a question";
                     var button = document.getElementById('send');
+                    // TODO: fix this
+                        let p = messages.lastChild.lastChild;
+                        p.innerHTML += data.message;
                     button.innerHTML = "Send";
                     button.disabled = false;
                 } else if (data.type === "error") {

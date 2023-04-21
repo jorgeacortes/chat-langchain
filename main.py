@@ -12,6 +12,10 @@ from callback import QuestionGenCallbackHandler, StreamingLLMCallbackHandler
 from query_data import get_chain
 from schemas import ChatResponse
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 vectorstore: Optional[VectorStore] = None
@@ -59,7 +63,7 @@ async def websocket_endpoint(websocket: WebSocket):
             )
             chat_history.append((question, result["answer"]))
 
-            end_resp = ChatResponse(sender="bot", message="", type="end")
+            end_resp = ChatResponse(sender="bot", message=result["answer"], type="end")
             await websocket.send_json(end_resp.dict())
         except WebSocketDisconnect:
             logging.info("websocket disconnect")
@@ -76,5 +80,4 @@ async def websocket_endpoint(websocket: WebSocket):
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="0.0.0.0", port=9000)
